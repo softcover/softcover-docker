@@ -21,9 +21,11 @@ WORKDIR /root
 # ==============================================================================
 # install epubcheck
 # ==============================================================================
+ENV EPUB_VERSION=4.0.2
+
 RUN curl -LO \
-  https://github.com/IDPF/epubcheck/releases/download/v3.0/epubcheck-3.0.zip \
-  && unzip epubcheck-3.0.zip -d bin && rm epubcheck-3.0.zip
+  https://github.com/IDPF/epubcheck/releases/download/v${EPUB_VERSION}/epubcheck-${EPUB_VERSION}.zip \
+  && unzip epubcheck-${EPUB_VERSION}.zip -d bin && rm epubcheck-${EPUB_VERSION}.zip
 
 # ==============================================================================
 # install kindlegen
