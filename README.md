@@ -2,7 +2,7 @@
 
 For running the [Softcover](https://github.com/softcover/softcover) eBook typesetting system.
 
-Image hosted on [DockerHub](https://hub.docker.com/repository/docker/softcover/softcover).
+Image hosted on [DockerHub](https://hub.docker.com/r/softcover/softcover).
 
 ## Usage:
 
