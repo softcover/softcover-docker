@@ -1,45 +1,30 @@
-FROM phusion/baseimage:0.9.11
-# https://github.com/phusion/baseimage-docker
+FROM circleci/ruby:2.6.3-stretch-node-browsers-legacy
 MAINTAINER Nick Merwin <nick@softcover.io>
+LABEL company="Softcover, Inc."
+LABEL version="1.0.0"
 
-ENV HOME /root
-RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
-CMD ["/sbin/my_init"]
+USER root
 
 # ==============================================================================
 # install deps
 # ==============================================================================
-RUN apt-get update \
-  && apt-get install -y ruby gems g++ ruby-dev libcurl3 libcurl3-gnutls \
-  libcurl4-openssl-dev imagemagick default-jre inkscape phantomjs \
-  calibre texlive-full nodejs
-
-# nodejs => node
-RUN cd /usr/local/bin && ln -s /usr/bin/nodejs node
-
-WORKDIR /root
-# ==============================================================================
-# install epubcheck
-# ==============================================================================
-RUN curl -LO \
-  https://github.com/IDPF/epubcheck/releases/download/v3.0/epubcheck-3.0.zip \
-  && unzip epubcheck-3.0.zip -d bin && rm epubcheck-3.0.zip
-
-# ==============================================================================
-# install kindlegen
-# ==============================================================================
-RUN curl -LO \
-  http://kindlegen.s3.amazonaws.com/kindlegen_linux_2.6_i386_v2_9.tar.gz \
-  && tar -zxvf kindlegen_linux_2.6_i386_v2_9.tar.gz \
-  && rm kindlegen_linux_2.6_i386_v2_9.tar.gz \
-  && cd /usr/local/bin \
-  && ln -s ~/kindlegen_linux_2.6_i386_v2_9/kindlegen kindlegen
+RUN gem install -v 2.1.4 bundler
+RUN apt-get update -qq && apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended \
+  texlive-latex-extra texlive-fonts-extra fonts-gfs-bodoni-classic inkscape ghostscript cabextract
+RUN wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb \
+  && dpkg -i ttf-mscorefonts-installer_3.6_all.deb
+RUN wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh
+ENV PATH="${PATH}:/root"
+RUN curl -O -L https://github.com/IDPF/epubcheck/releases/download/v4.0.2/epubcheck-4.0.2.zip && unzip epubcheck-4.0.2.zip -d ~
+RUN curl -o ~/kindlegen http://softcover-binaries.s3.amazonaws.com/kindlegen && chmod +x ~/kindlegen
+RUN wget https://softcover-static.s3.amazonaws.com/Bodoni%2072%20Smallcaps%20Book.ttf && \
+  cp 'Bodoni 72 Smallcaps Book.ttf' /usr/share/fonts/truetype/bodoni-classic \
+  && fc-cache -fs
 
 # ==============================================================================
 # softcover gem
 # ==============================================================================
-RUN apt-get install -y libxslt-dev libxml2-dev build-essential
-RUN gem install softcover --pre --no-ri --no-rdoc
+RUN gem install softcover
 
 # ==============================================================================
 # Health check
