@@ -1,8 +1,8 @@
-# Softcover Docker Image
+# Softcover Dockerfile
 
-For running the [softcover.io](https://www.softcover.io) latex build system.
+For running the [Softcover](https://github.com/softcover/softcover) eBook typesetting system.
 
-https://hub.docker.com/repository/docker/softcover/softcover
+Image hosted on [DockerHub](https://hub.docker.com/repository/docker/softcover/softcover).
 
 ## Usage:
 

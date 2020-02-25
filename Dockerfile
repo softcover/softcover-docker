@@ -38,9 +38,3 @@ RUN mkdir /book
 WORKDIR /book
 
 EXPOSE 4000
-
-# from book directory build html:
-# $ docker run -v `pwd`:/book softcover:latest sc build:html
-
-# run server:
-# $ docker run -v `pwd`:/book -d -p 4000:4000 softcover:latest sc server
