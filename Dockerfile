@@ -1,7 +1,7 @@
-FROM circleci/ruby:2.6.3-stretch-node-browsers-legacy
+FROM circleci/ruby:2.6.6-buster-node-browsers-legacy
 MAINTAINER Nick Merwin <nick@softcover.io>
 LABEL company="Softcover, Inc."
-LABEL version="1.0.0"
+LABEL version="1.0.1"
 
 USER root
 
@@ -9,8 +9,11 @@ USER root
 # install deps
 # ==============================================================================
 RUN gem install -v 2.1.4 bundler
-RUN apt-get update -qq && apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended \
-  texlive-latex-extra texlive-fonts-extra fonts-gfs-bodoni-classic inkscape ghostscript cabextract
+RUN echo 'deb http://deb.debian.org/debian buster-backports main' > /etc/apt/sources.list.d/backports.list
+RUN apt-get update -qq \
+  && apt-get -t buster-backports install -qy --no-install-recommends "inkscape" \
+  && apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended \
+     texlive-latex-extra texlive-fonts-extra fonts-gfs-bodoni-classic ghostscript cabextract
 RUN wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb \
   && dpkg -i ttf-mscorefonts-installer_3.6_all.deb
 RUN wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh
