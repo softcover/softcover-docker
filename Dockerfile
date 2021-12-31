@@ -23,7 +23,7 @@ RUN wget https://softcover-static.s3.amazonaws.com/Bodoni%2072%20Smallcaps%20Boo
 # ==============================================================================
 # softcover gem
 # ==============================================================================
-RUN gem install softcover:1.6.4
+RUN gem install softcover:1.7.3
 
 # ==============================================================================
 # Health check
